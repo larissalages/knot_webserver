@@ -8,3 +8,6 @@ app.listen(8081, function() {
   app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html')
   })
+  app.post('/getDevices', (req, res) => {
+    console.log('Test')
+  })

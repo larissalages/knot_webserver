@@ -5,6 +5,19 @@
   <title>Knot WebServer</title>
 </head>
 <body>
-    Site under development. Wait a moment, it will be great!!!
+    <form action="/getDevices" method="POST">
+        <label>Get Devices: </label><br><br>
+        <input type="text" placeholder="Hostname" name="hostname">
+        <br>
+        <input type="text" placeholder="Port" name="port">
+        <br> 
+        <input type="text" placeholder="Owner Uuid" name="uuid">
+        <br>
+        <input type="text" placeholder="Owner Token" name="token">
+        <br>
+        <input type="text" placeholder="Gateway" name="gateway">
+        <br>
+        <button type="submit">Submit</button>
+      </form>
 </body>
 </html>
