@@ -6,5 +6,5 @@ app.listen(8081, function() {
   })
 
   app.get('/', function(req, res) {
-    res.send('Site under development. Wait a moment, it will be great!')
+    res.sendFile(__dirname + '/index.html')
   })
