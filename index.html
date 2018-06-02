@@ -21,7 +21,7 @@
       </form>
 
       <form action="/getData" method="POST">
-        <label>Get Devices: </label><br><br>
+        <label>Get Data: </label><br><br>
         <input type="text" placeholder="Hostname" name="hostname">
         <br>
         <input type="text" placeholder="Port" name="port">
@@ -35,6 +35,27 @@
         <input type="text" placeholder="Thing Uuid" name="thingUuid">
         <br>
         <input type="text" placeholder="Item ID" name="itemID">
+        <br>
+        <button type="submit">Submit</button>
+      </form>
+
+      <form action="/setData" method="POST">
+        <label>Set Data: </label><br><br>
+        <input type="text" placeholder="Hostname" name="hostname">
+        <br>
+        <input type="text" placeholder="Port" name="port">
+        <br> 
+        <input type="text" placeholder="Owner Uuid" name="uuid">
+        <br>
+        <input type="text" placeholder="Owner Token" name="token">
+        <br>
+        <input type="text" placeholder="Gateway" name="gateway">
+        <br>
+        <input type="text" placeholder="Thing Uuid" name="thingUuid">
+        <br>
+        <input type="text" placeholder="Item ID" name="itemID">
+        <br>
+        <input type="text" placeholder="Value Data" name="valueData">
         <br>
         <button type="submit">Submit</button>
       </form>

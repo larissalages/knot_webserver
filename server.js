@@ -15,6 +15,7 @@ var meshblu = new MeshbluSocketIO({
   protocol: "ws"
 });
 var responses = {};
+var set_data = false
 
 meshblu.on("ready", function(response) {
   console.log("meshblu ready")
@@ -24,14 +25,57 @@ meshblu.on("ready", function(response) {
   }
   const uuid = response.uuid;
   if (responses[uuid]) {
-    responses[uuid].forEach((info, i) => {
-      //you can pass a list of uuids instead  e.g. { gateways: ["uud1","uuid2"] }
-      meshblu.devices({ gateways: ["*"] }, function(response) {
-        info.res.send(response);
-        delete responses[uuid][i];
+    if(set_data == false){
+      responses[uuid].forEach((info, i) => {
+        //you can pass a list of uuids instead  e.g. { gateways: ["uud1","uuid2"] }
+        meshblu.devices({ gateways: ["*"] }, function(response) {
+          info.res.send(response);
+          delete responses[uuid][i];
+        });
       });
-    });
+    }
+    else{
+      responses[uuid].forEach((info, i) => {
+        var updateValues = {};
+        if (info.itemData === "true") {
+          updateValues = {
+            uuid: info.thingUuid,
+            set_data: [
+              {
+                sensor_id: parseInt(info.itemId),
+                value: true
+              }
+            ]
+          };
+        } else if (info.itemData === "false") {
+          updateValues = {
+            uuid: info.thingUuid,
+            set_data: [
+              {
+                sensor_id: parseInt(info.itemId),
+                value: false
+              }
+            ]
+          };
+        } else {
+          updateValues = {
+            uuid: info.thingUuid,
+            set_data: [
+              {
+                sensor_id: parseInt(info.itemId),
+                value: parseInt(info.itemData)
+              }
+            ]
+          };
+        }
+        meshblu.update(updateValues, function(response) {
+          info.res.send(response);
+          delete responses[uuid][i];
+        });
+      });
+    }
   }
+
 });
 
 meshblu.on("notReady", function(response) {
@@ -104,4 +148,32 @@ app.post('/getData',(req,res) => {
   }
   meshblu.connect();
 
+})
+
+app.post('/setData',(req,res) => {
+  set_data = true
+
+  const hostname = req.body.hostname;
+  const port = req.body.port;
+  const uuid = req.body.uuid;
+  const token = req.body.token;
+  const thingUuid = req.body.thingUuid;
+  const itemId = req.body.itemId;
+  const itemData = req.body.valueData;
+
+  if (uuid === "" || token === "" || thingUuid === "" || itemId === ""
+    || itemData === "")
+    res.send({ status: "Please provide all required values." });
+
+  meshblu["_options"].hostname = hostname;
+  meshblu["_options"].port = port;
+  meshblu["_options"].uuid = uuid;
+  meshblu["_options"].token = token;
+
+  if (responses[uuid]) {
+    responses[uuid].push({ res, thingUuid, itemId, itemData });
+  } else {
+    responses[uuid] = [{ res, thingUuid, itemId, itemData }];
+  }
+  meshblu.connect();
 })
