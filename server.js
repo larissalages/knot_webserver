@@ -80,3 +80,28 @@ app.post('/getDevices', (req, res) => {
   }
   meshblu.connect();
 })
+
+app.post('/getData',(req,res) => {
+  console.log(req.body);
+  const hostname = req.body.hostname;
+  const port = req.body.port;
+  const uuid = req.body.uuid;
+  const token = req.body.token;
+  const thingUuid = req.body.thingUuid;
+  const itemId = req.body.itemId;
+
+  if (uuid === "" || token === "" || thingUuid === "" || itemId === "")
+    res.send({ status: "Please provide all required values." });
+  meshblu["_options"].hostname = hostname;
+  meshblu["_options"].port = port;
+  meshblu["_options"].uuid = uuid;
+  meshblu["_options"].token = token;
+
+  if (responses[uuid]) {
+    responses[uuid].push({ res, thingUuid, itemId });
+  } else {
+    responses[uuid] = [{ res, thingUuid, itemId }];
+  }
+  meshblu.connect();
+
+})
