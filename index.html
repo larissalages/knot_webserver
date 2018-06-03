@@ -59,5 +59,31 @@
         <br>
         <button type="submit">Submit</button>
       </form>
+
+      <form action="/sendConfig" method="POST">
+        <label>Set Data: </label><br><br>
+        <input type="text" placeholder="Hostname" name="hostname">
+        <br>
+        <input type="text" placeholder="Port" name="port">
+        <br> 
+        <input type="text" placeholder="Owner Uuid" name="uuid">
+        <br>
+        <input type="text" placeholder="Owner Token" name="token">
+        <br>
+        <input type="text" placeholder="Thing Uuid" name="thingUuid">
+        <br>
+        <input type="text" placeholder="Item ID" name="itemID">
+        <br>
+        <input type="text" placeholder="Event Flags" name="evtFlags">
+        <br>
+        <input type="text" placeholder="Time seconds" name="timeSec">
+        <br>
+        <input type="text" placeholder="Lower Limit" name="lowerLimit">
+        <br>
+        <input type="text" placeholder="Upper Limit" name="upperLimit">
+        <br>        
+        <button type="submit">Submit</button>
+      </form>
+
 </body>
 </html>
