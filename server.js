@@ -18,6 +18,7 @@ var meshblu = new MeshbluSocketIO({
 var responses = {};
 var set_data = false
 var set_config = false
+var get_devices = false
 
 meshblu.on("ready", function(response) {
   console.log("meshblu ready")
@@ -95,13 +96,20 @@ meshblu.on("ready", function(response) {
         //you can pass a list of uuids instead  e.g. { gateways: ["uud1","uuid2"] }
         meshblu.devices({ gateways: ["*"] }, function(response) {
           console.log(response)
-          index = i+1
-          str_result = "Device ID : " + index + "<br />"
-          str_result = str_result+ "Name : " + JSON.stringify(response[0].name) + "<br />"
-          str_result = str_result + "Type : " + JSON.stringify(response[0].type) + "<br />"
-          str_result = str_result + "UUID : " + JSON.stringify(response[0].uuid) + "<br />"
-          str_result = str_result + "Online : " + JSON.stringify(response[0].online) + "<br />"
+
+          str_result = response;
+
+          if(get_devices == true)
+          {
+            index = i+1
+            str_result = "Device ID : " + index + "<br />"
+            str_result = str_result+ "Name : " + JSON.stringify(response[0].name) + "<br />"
+            str_result = str_result + "Type : " + JSON.stringify(response[0].type) + "<br />"
+            str_result = str_result + "UUID : " + JSON.stringify(response[0].uuid) + "<br />"
+            str_result = str_result + "Online : " + JSON.stringify(response[0].online) + "<br />"            
+          }
           info.res.send(str_result);
+
           delete responses[uuid][i];
         });
       });
@@ -137,7 +145,8 @@ app.get('/', function(req, res) {
 app.post('/getDevices', (req, res) => {
   console.log("Get Device")
   set_data = false
-  set_config = false 
+  set_config = false
+  get_devices = true
 
   const uuid = req.body.uuid;
   const token = req.body.token;
@@ -165,6 +174,7 @@ app.post('/getData',(req,res) => {
   console.log("Get Data")
   set_data = false
   set_config = false 
+  get_devices = false
 
   const hostname = req.body.hostname;
   const port = req.body.port;
@@ -193,6 +203,7 @@ app.post('/setData',(req,res) => {
   console.log("Set Data")
   set_data = true
   set_config = false
+  get_devices = false
 
   const hostname = req.body.hostname;
   const port = req.body.port;
@@ -223,6 +234,7 @@ app.post("/sendConfig", function(req, res, next) {
   console.log("Send Config")
   set_config = true
   set_data = false
+  get_devices = false
 
   const hostname = req.body.hostname;
   const port = req.body.port;
