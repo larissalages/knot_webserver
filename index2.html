@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Knot WebServer</title>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+    <form>
+        <div class="form-group" id="formget">
+        <label>Get Devices: </label><br><br>
+        Hostname: <input class="form-control" type="text" placeholder="Hostname" name="hostname" id="hostname">
+        <br>
+        Port: <input class="form-control" type="text" placeholder="Port" name="port" id="port">
+        <br> 
+        Owner Uuid: <input class="form-control" type="text" placeholder="Owner Uuid" name="uuid" id= "uuid">
+        <br>
+        Owner Token: <input class="form-control" type="text" placeholder="Owner Token" name="token" id="token">
+        <br>
+        Gateway: <input class="form-control" type="text" placeholder="Gateway"  id="gateway">
+        <br>
+        <button  class="btn btn-primary" type="submit"  value="Go" onclick="getDevices();"  >Submit</button>
+        </div>
+      </form>
+
+
+      <div id="response"> </div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+
+<script type="text/javascript">  
+     
+    function getDevices () {
+        
+    const request = {
+    ownerUuid: $("#uuid").val(),
+    ownerToken: $("#token").val(),
+    hostname: $("#hostname").val(),
+    port: $("#port").val(),
+    gateway: $("#gateway").val()
+    };
+    
+    
+    //$("#response").html("<p>" + gateway.value+ "</p>")
+     
+    fetch("/getDevices", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(request)
+    })
+      .then(res => res.json())
+      .then(
+        function(json) {
+          //getDevices["response"] = JSON.stringify(json, null, 3);
+          $("#response").html("<p>" + JSON.stringify(json) + "</p>")
+          console.log(json);
+          //this.setState({ getDevices: getDevices });
+        }.bind(this)
+      );
+    e.preventDefault();
+  };
+
+</script>
+
+</body>
+</html>

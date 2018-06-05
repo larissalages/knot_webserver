@@ -3,6 +3,7 @@ const app = express();
 const bodyParser= require('body-parser')
 var MeshbluSocketIO = require("meshblu");
 const MongoClient = require('mongodb').MongoClient
+var os = require('os');
 
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -27,7 +28,7 @@ meshblu.on("ready", function(response) {
   }
   const uuid = response.uuid;
   if (responses[uuid]) {
-    if(set_data == true){ //SET DATA
+    if(set_data == true){  //SET DATA
 
       responses[uuid].forEach((info, i) => {
         var updateValues = {};
@@ -67,7 +68,8 @@ meshblu.on("ready", function(response) {
           delete responses[uuid][i];
         });
       });
-    }else if(set_config == true) { //SET CONFIG
+    }
+    else if(set_config == true) {  //SET CONFIG
 
       responses[uuid].forEach((info, i) => {
         var updateValues = {
@@ -87,11 +89,19 @@ meshblu.on("ready", function(response) {
           delete responses[uuid][i];
           });
       });
-    } else{ //ELSE
+    } 
+    else{  //ELSE
       responses[uuid].forEach((info, i) => {
         //you can pass a list of uuids instead  e.g. { gateways: ["uud1","uuid2"] }
         meshblu.devices({ gateways: ["*"] }, function(response) {
-          info.res.send(response);
+          console.log(response)
+          index = i+1
+          str_result = "Device ID : " + index + "<br />"
+          str_result = str_result+ "Name : " + JSON.stringify(response[0].name) + "<br />"
+          str_result = str_result + "Type : " + JSON.stringify(response[0].type) + "<br />"
+          str_result = str_result + "UUID : " + JSON.stringify(response[0].uuid) + "<br />"
+          str_result = str_result + "Online : " + JSON.stringify(response[0].online) + "<br />"
+          info.res.send(str_result);
           delete responses[uuid][i];
         });
       });
